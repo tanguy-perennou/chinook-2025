@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %} {# Yes, load it again even if base.html loads it #}
+
+{% comment %}
+Extend site-wide base HTML template located in main templates/ dir
+(same level as manage.py)
+{% endcomment %}
+
+{% block title %}Chinook Albums List{% endblock title%}
+
+{% block content %}
+
+<div class="row pb-3">
+    <h1>Albums</h1>
+</div>
+
+<div class="clearfix">
+    <div class="float-right pb-3">
+        <form action="{% url 'disks:album_list' %}" method="post" class="form">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            {% bootstrap_button button_type="submit" content="Filter" %}
+        </form>
+    </div>
+</div>
+
+<div class="row">
+{% if albums %}
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Artist</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for album in albums %}
+            <tr>
+                <td><a href="{% url 'disks:album_details' album.id %}">{{ album.title }}</a></td>
+                <td>{{ album.artist.name }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <div class="jumbotron"><i>No album available.</i></div>
+{% endif %}
+
+</div>
+
+{% endblock content %}

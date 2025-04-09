@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% comment %}
+Extend site-wide base HTML template located in main templates/ dir
+(same level as manage.py)
+{% endcomment %}
+
+{% block title %}Chinook Album '{{ album.title | truncatechars:10 }}' {% endblock title%}
+
+{% block content %}
+
+<div class="row pb-3">
+    <h2>{{ album.title }} <br/> <small>by {{ album.artist.name }}</small></h2>
+</div>
+
+<div class="row">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Track name</th>
+            <th>Composer(s)</th>
+            <th>Duration (mins:secs)</th>
+            <th>Size (bytes)</th>
+            <th>Unit Price (€)</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for track in album.track_set.all %}
+            <tr>
+                <td>{{ track.name }}</td>
+                <td>{{ track.composer }}</td>
+                <td>{{ track.ms_as_mins_secs }}</td>
+                <td>{{ track.bytes }}</td>
+                <td>{{ track.unitPrice }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="row pt-3">
+    <a class="btn btn-primary" href="{% url 'disks:album_list' %}">Back to album list</a>
+</div>
+
+{% endblock content %}
